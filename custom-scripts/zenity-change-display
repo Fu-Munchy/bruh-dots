@@ -1,0 +1,41 @@
+#!/bin/bash
+
+
+USEROUT=$(zenity --list  --radiolist  --column "ID" --column="Name" 1 Mirror 2 Extend 3 External-Only 4 Primary-Only)
+
+
+function extendingMenu(){
+	
+	EXTENDOUT=$(zenity --list --radiolist --column="ID" --column="Name" 1 Above 2 Left 3 Right 4 Below)
+
+	case $EXTENDOUT in
+		Above)
+			echo "Extending above.."; xrandr --output HDMI-A-0 --auto --above eDP;;
+		Left)
+			echo "Extending left"; xrandr --output HDMI-A-0 --auto --left-of eDP;;
+		Right)
+			echo "Extending Right";xrandr --output HDMI-A-0 --auto --right-of eDP;;
+		Below)
+			echo "Extending Below";xrandr --output HDMI-A-0 --auto --below eDP;;
+
+
+
+
+	esac
+
+nitrogen --restore
+}
+
+
+case $USEROUT in 
+	Mirror)
+		echo "Mirroring.."; xrandr --output eDP --same-as HDMI-A-0; nitrogen --restore ;;
+	Extend)
+		echo "Opening extend menu"; extendingMenu;;
+	External-Only)
+		echo "External only"; xrandr --output eDP --off --output HDMI-A-0 --auto ;;
+	Primary-Only)
+		echo "Internal only"; xrandr --output HDMI-A-0 --off --output eDP --auto;;
+esac
+
+nitrogen --restore

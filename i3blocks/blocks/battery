@@ -1,0 +1,22 @@
+#!/bin/bash
+
+batteryInfo=$(acpi| grep 'Battery')
+batteryState=$(echo $batteryInfo | grep -wo "Full\|Charging\|Discharging")
+batteryPercent=$(echo $batteryInfo | grep -o '[0-9]\+%')
+
+criticalBattery=20
+
+
+if [[ "${batteryState}" = "Charging" ]]; then
+	echo "+${batteryPercent}"
+
+elif [[ "${batteryState}" = "Discharging" ]]; then
+	echo "-${batteryPercent}"
+
+else
+	echo "${batteryPercent}"
+fi
+
+if [[ "${batteryPercent::-1}" -le "${criticalBattery}" && ${batteryState} = "Discharging"  ]]; then
+	$(notify-send -t 500 -u critical  "Low Battery, charge yo shit nigga") 
+fi

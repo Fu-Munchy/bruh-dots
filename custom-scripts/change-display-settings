@@ -1,0 +1,56 @@
+#!/bin/bash
+#
+# Store menu options selected by the user
+#
+INPUT=/tmp/displayMode.sh.$$
+inputTwo=/tmp/extendingmode.sh.$$
+#
+# trap and delete temp files
+#
+trap "rm inputTwo; rm $INPUT; exit" SIGHUP SIGINT SIGTERM
+#
+#Function which runs the "extending" menubox
+#
+function extraExtendOptions(){
+#
+#Setting up the menubox with a title, and 4 alternatives
+#And then passing user input into variable inputTwo
+#
+	dialog --backtitle "Display Settings" --title "Choose Display Mode" --menu "Where is the external monitor?" 10 30 3 "1" "Above" "2" "Left-of" "3" "Right-of" "4" "Below" 2>"${inputTwo}"
+#
+#Creating a variabel called extendingmode to be easily used in a switch-case situation
+#
+	extendingmode=$(<"${inputTwo}")
+#
+#The switch-case operator which runs a command depending on the output from the dialog box
+#Same situation as the first menubox the user sees.
+#
+	case $extendingmode in
+	        1) echo "Displaying above primary monitor...";xrandr --output HDMI-A-0 --auto --above eDP;;
+                2) echo "Displaying left of primary monitor..."; xrandr --output HDMI-A-0 --auto --left-of eDP;;
+                3) echo "Displaying right of primary monitor...";xrandr --output HDMI-A-0 --auto  --right-of eDP;;
+                4) echo "Displaying below primary monitor...";xrandr --output HDMI-A-0 --auto --below eDP;;
+        esac
+}
+#
+#Dialog box which displays choices for user, then stores the output to $INPUT
+#
+dialog --backtitle "Display Settings" --title "Choose Display" --menu ""  10 30 3 "1" "Mirror" "2" "Extend" 2>"${INPUT}"
+#
+#Store
+#
+ displayMode=$(<"${INPUT}")
+#
+#This is the switch-case for the first menubox. The output from the first menubox(which has been parsed into $displaymode)
+#is checked with each case number. Then each case performs a command, and the program ends.
+#
+case $displayMode in
+ 	1) echo "mirroring..."; xrandr --output HDMI-A-0 --auto --same-as eDP;;
+ 	2) echo "Extending..."; extraExtendOptions;;
+	3) internalOrExternalMode;;
+ esac
+#If you find any tempfiles, delete them
+[ -f $inputTwo ] && rm $inputTwo
+[ -f $INPUT ] && rm $INPUT
+
+nitrogen --restore

@@ -1,0 +1,20 @@
+command=~/.config/i3/i3blocks/blocks/$BLOCK_NAME
+
+[volume-music]
+label=
+interval=1
+color=#cc241d
+
+[battery]
+label=
+interval=1
+color=#d79921
+
+[time]
+interval=1
+
+[brightness]
+command=echo "$(light -G -s sysfs/backlight/amdgpu_bl0)%"
+label=
+interval=1
+color=#689d68
