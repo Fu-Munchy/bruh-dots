@@ -1,0 +1,5 @@
+#!/bin/bash
+
+dateAndTimeOut=$(date '+%H:%M:%S  %a %d-%b-%Y')
+echo $dateAndTimeOut
+
