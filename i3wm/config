@@ -31,13 +31,16 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
 
-# Use pactl to adjust volume in PulseAudio.
+# Use amixer to adjust volume in alsa.
 set $refresh_i3blocks killall -SIGUSR1 i3blocks
-bindsym XF86AudioRaiseVolume exec --no-startup-id amixer --device pulse sset Master 10%+ && $refresh_i3blocks
-bindsym XF86AudioLowerVolume exec --no-startup-id  amixer --device pulse sset Master 10%- && $refresh_i3blocks
-bindsym XF86AudioMute exec --no-startup-id pactl amixer --device pulse sset Master toggle && $refresh_i3blocks
-bindsym XF86AudioMicMute exec --no-startup-id amixer --device pulse sset Capture toggle  && $refresh_i3blocks
+bindsym XF86AudioRaiseVolume exec amixer -D pulse sset Master 5%+ && pkill -SIGRTMIN+1 i3blocks
+bindsym XF86AudioLowerVolume exec amixer -D pulse sset Master 5%- && pkill -SIGRTMIN+1 i3blocks 
+bindsym XF86AudioMute exec amixer -D pulse sset Master toggle && pkill -SIGTMIN+1 i3blocks
+bindsym XF86AudioMicMute exec amixer -D pulse sset Capture toggle && pkill -SIGMIN+1 i3blocks
 
+# Adjust brightness using light
+bindsym XF86MonBrightnessDown exec light -U 5 && pkill -SIGRTMIN+2 i3blocks
+bindsym XF86MonBrightnessUp exec light -A 5 && pkill -SIGRTMIN+2 i3blocks
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
@@ -47,40 +50,20 @@ bindsym $mod+Return exec $myTerminal
 # kill focused window
 bindsym $mod+Shift+q kill
 
-# start dmenu (a program launcher)
-# bindsym $mod+d exec dmenu_run
-
-# There also is the (new) i3-dmenu-desktop which only displays applications
-# shipping a .desktop file. It is a wrapper around dmenu, so you need that
-# installed.
-# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
-
 # change focus
-#bindsym $mod+j focus left
-#bindsym $mod+k focus down
-#bindsym $mod+l focus up
-#bindsym $mod+oslash focus right
-
-# alternatively, you can use the cursor keys:
-bindsym $mod+Left focus left
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
-bindsym $mod+Right focus right
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
 
 # move focused window
-#bindsym $mod+Shift+j move left
-#bindsym $mod+Shift+k move down
-#bindsym $mod+Shift+l move up
-#bindsym $mod+Shift+oslash move right
-
-# alternatively, you can use the cursor keys:
-bindsym $mod+Shift+Left move left
-bindsym $mod+Shift+Down move down
-bindsym $mod+Shift+Up move up
-bindsym $mod+Shift+Right move right
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
 
 # split in horizontal orientation
-bindsym $mod+h split h
+# bindsym $mod+h split h
 
 # split in vertical orientation
 bindsym $mod+v split v
@@ -142,12 +125,8 @@ bindsym $mod+Shift+8 move container to workspace number $ws8
 bindsym $mod+Shift+9 move container to workspace number $ws9
 bindsym $mod+Shift+0 move container to workspace number $ws10
 
-#---------------------------------------------------[Custom Commands]-------------------------------------------------------
-
-#----------Looks customization------------------
-
 #no titlebars on windows, while adding gaps
-for_window [class="^.*"] border pixel 2
+for_window [class="^.*"] border pixel 3
 gaps inner 8
 gaps outer 8
 
@@ -156,23 +135,20 @@ focus_follows_mouse no
 
 #------------Run on startup----------------------
 
-#Restart audio system (pulseaudio and ALSA)
-exec pulseaudio -k && sudo alsa force-reload
-#Set volume to 50%
-exec amixer --device pulse sset Master 50%
 #Set Wallpaper with nitrogen 
-exec nitrogen --restore 
+exec_always nitrogen --restore 
+
+#start compositor
+
+#Start spotifyd
+exec  spotifyd --config-path ~/.config/spotifyd/spotifyd.conf
 
 #-------------Keyboard Shortcuts----------------
 
 #rofi shortcut
 bindsym $mod+d exec rofi -show drun
 
-#External monitor manager
-bindsym XF86Display exec zenity-change-display 
-#Setting brightness
-bindsym XF86MonBrightnessUp exec --no-startup-id sudo brightnessctl set +5%
-bindsym XF86MonBrightnessDown exec --no-startup-id sudo brightnessctl set 5%-
+#Sleep and lock screen
 bindsym XF86Sleep exec --no-startup-id $lockscreen && systemctl suspend
 
 
@@ -210,43 +186,43 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
+
+#Load Polybar
+
+exec polybar
+
+
+
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 #---------------Colors-----------------
 
-# set primary gruvbox colorscheme colors
-set $bg #282828
-set $red #cc241d
-set $green #98971a
-set $yellow #d79921
-set $blue #458588
-set $purple #b16286
-set $aqua #689d68
-set $gray #a89984
-set $darkgray #1d2021
-
+# set colorscheme colors
+set $bg #060404
+set $yellow #C2833F
+set $darkgray #7C6454
+set $brown #622C0D
 # blue gruvbox
-# class                 border|backgr|text|indicator|child_border
-client.focused          $blue $blue $darkgray $purple $blue
-client.focused_inactive $darkgray $darkgray $yellow $purple $darkgray
-client.unfocused        $darkgray $darkgray $yellow $purple $darkgray
-client.urgent           $red $red $white $red $red
+# class                 border |backgr    |text     |indicator |child_border
+client.focused          $yellow $yellow   $bg     $darkgray    $yellow
+client.unfocused        $darkgray $darkgray $bg $purple    $darkgray
 
 
-bar {
-        font pango: DejaVu serif 10 
-	status_command i3blocks -c ~/.config/i3/i3blocks/config
-	position top
-	separator_symbol "ᗕ"
-	colors {
-		background $bg
-		statusline $white
-		separator  $purple
-		#class		    border	backgr	    text
-	        focused_workspace   $blue	$blue	    $bg
-		inactive_workspace  $bg		$bg	    $gray
-		active_workspace    $bg		$bg	    $gray
-		urgent_workspace    $red	$red	    $bg
-		binding_mode	    $purple	$purple	    $white
-	}
-}
+# bar {
+#         font pango: DejaVu serif 10 
+# 	status_command i3blocks -c ~/.config/i3/i3blocks/config
+# 	position top
+# 	separator_symbol "ᗕ"
+# 	colors {
+# 		background $gruvbox-bg
+# 		statusline $white
+# 		separator  $purple
+# 		#class		    border	backgr	    text
+# 	        focused_workspace   $blue	$blue	    $bg
+# 		inactive_workspace  $bg		$bg	    $gray
+# 		active_workspace    $bg		$bg	    $gray
+# 		urgent_workspace    $red	$red	    $bg
+# 		binding_mode	    $purple	$purple	    $white
+# 	}
+# }
+# 

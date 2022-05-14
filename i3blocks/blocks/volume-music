@@ -1,6 +1,0 @@
-#!/bin/bash
-
-volumeInfo=$(amixer -c 1 get 'Master')
-volumePercent=$(echo $volumeInfo | grep -o '[0-9]\+%')
-
-echo $volumePercent
