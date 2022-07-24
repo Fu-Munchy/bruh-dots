@@ -1,0 +1,46 @@
+ignore-empty-password
+
+
+clock 
+datestr="%a %e.%m.%y" 
+timestr="%k:%M"
+
+screenshots
+
+indicator 
+indicator-radius 80 
+indicator-thickness 7 
+
+effect-scale 0.4 
+effect-vignette 0.2:0.2 
+effect-blur 4x4 
+
+
+inside-color=
+inside-clear-color=
+inside-caps-lock-color=
+inside-ver-color=
+inside-wrong-color= 
+
+ring-color=
+ring-clear-color=
+ring-clear-color=
+ring-caps-color=
+ring-ver-color=
+ring-wrong-color=
+
+line-color=
+line-clear-color=
+line-caps-lock-color=
+line-ver-color=
+line-wrong-color=
+
+text-clear-color=
+text-ver-color=
+text-wrong-color=
+
+bs-hl-color=
+caps-lock-key-hl-color=
+caps-lock-bs-hl-color=
+text-caps-lock-color=
+
