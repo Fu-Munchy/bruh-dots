@@ -14,8 +14,8 @@ After spending (what feels like) eternity, this is how my window manager looks:
 ## Swaywm config (wayland)
 
 This configuration is from Sway, a wayland compositing window manager
-![Alternative text](images/Screenshot_2022-07-24_18.05.05.png)
+![Alternative text](images/sway-window-screenshot.png)
 
 I use the theme called *Nord* for the configuration.
 
-![Alternative text](images/Screenshot_2022-07-24_18.10.10.png)
+![Alternative text](images/sway-bg-screenshot.png)
