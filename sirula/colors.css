@@ -1,0 +1,9 @@
+/* Nord theme */
+@define-color text #eceff4;
+@define-color warn #ebcb8b;
+@define-color crit #bf616a;
+@define-color accent-green #a3be8c;
+@define-color accent-purple #b48ead;
+@define-color highlight #81a1c1;
+@define-color background-light #4c566a; 
+@define-color background #2e3440;
