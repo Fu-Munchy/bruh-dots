@@ -1,0 +1,48 @@
+@import url("colors.css");
+
+
+.app-row {
+    transition: unset;
+    padding: 5px 0 5px 10px;
+    background-color: @background;
+}
+
+.app-row:selected {
+    background-color: @background-light;
+}
+
+.app-label {
+    margin-left: 10px;
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 300;
+    color: @text;
+}
+
+.app-list {
+    background-color: @background;
+ }
+
+#root-box {
+    border: 3px solid @highlight;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+    margin: 100px;
+    background-color: @background;
+}
+
+#search {
+    font-family: Roboto;
+    font-size: 14px;
+    padding: 2px 8px;
+    margin: 5px;
+    outline:unset;
+    border:2px solid @accent-purple;
+    background: @background;
+    color:@text;
+}
+selection{
+
+	background-color: red;
+
+}
